@@ -17,16 +17,15 @@ class Cframe : public QMainWindow
 public:
     Cframe(QWidget *parent = nullptr);
     ~Cframe();
-    void Doc_Hex();
+    //void Doc_Hex();
     void estiloInicial();
     void actualizarLabels(const QString& , const QString& );
-    string calculo();
+
+    QString Dec_Hex(int* );
 
 private slots:
     void on_Rb_dec_a_hex_clicked();
-
     void on_Rb_hex_a_dec_clicked();
-
     void on_Pb_calcular_clicked();
 
 private:

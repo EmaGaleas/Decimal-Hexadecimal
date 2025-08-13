@@ -17,11 +17,36 @@ Cframe::~Cframe()
 {
     delete ui;
 }
+//Area de codigo funcional
 
-void Cframe::Doc_Hex()
+QString Cframe::Dec_Hex(int* numeroDecimal)
 {
+    char hexDigitos[] = "0123456789ABCDEF";
+    int valor = *numeroDecimal;
 
+    if(valor == 0) return "0";
+
+    char* temp = new char[20];
+    char* pTemp = temp;
+
+    while(valor > 0) {
+        *pTemp = hexDigitos[valor % 16];
+        valor /= 16;
+        pTemp++;
+    }
+    *pTemp = '\0';
+
+    QString resultado;
+    char* end = pTemp - 1;
+    for(char* ptr = end; ptr >= temp; ptr--) {
+        resultado.append(*ptr);
+    }
+
+    delete[] temp;
+
+    return resultado;
 }
+
 
 
 void Cframe::on_Pb_calcular_clicked()
@@ -32,7 +57,16 @@ void Cframe::on_Pb_calcular_clicked()
             QMessageBox::warning(this, "Revisar", "Debe ingresar un dato a convertir.");
         }else{
             //aqui llamar a funcion con resultado
-            ui->Le_obtenido->setText(texto);
+            if(ui->Rb_dec_a_hex->isChecked()){
+                int* numeroPtr = new int(ui->TXT_ingresado->text().toInt());
+                QString hex = Dec_Hex(numeroPtr);
+                delete numeroPtr;
+
+                ui->Le_obtenido->setText(hex);
+            }else{
+                QMessageBox::warning(this, "Aviso", "Aun no tenemos una funcion que resuelva este caso.\nVuelve Pronto ;(");
+
+            }
         }
     }else{
         QMessageBox::warning(this, "Aviso", "Debe seleccionar qué proceso desea realizar.");
@@ -40,7 +74,7 @@ void Cframe::on_Pb_calcular_clicked()
 }
 
 
-//codigo de estilo y logica relacionada a lo visual
+//codigo de estilo y logica relacionada a lo visual NO TOCAR NI HACER NADA AQUI ABAJO
 void Cframe::estiloInicial()
 {
     ui->f_inicial->setStyleSheet("QFrame { background-color: black; }");
