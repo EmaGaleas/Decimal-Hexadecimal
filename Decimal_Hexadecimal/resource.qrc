@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/new/P1">
+        <file>portada.png</file>
+    </qresource>
+</RCC>

@@ -15,6 +15,7 @@ public:
     Cframe(QWidget *parent = nullptr);
     ~Cframe();
     void Doc_Hex();
+    void estiloInicial();
 
 private:
     Ui::Cframe *ui;
