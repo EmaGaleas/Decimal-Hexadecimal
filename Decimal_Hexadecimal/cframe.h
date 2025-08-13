@@ -2,6 +2,9 @@
 #define CFRAME_H
 
 #include <QMainWindow>
+#include <iostream>
+
+using std::string;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Cframe; }
@@ -16,6 +19,15 @@ public:
     ~Cframe();
     void Doc_Hex();
     void estiloInicial();
+    void actualizarLabels(const QString& , const QString& );
+    string calculo();
+
+private slots:
+    void on_Rb_dec_a_hex_clicked();
+
+    void on_Rb_hex_a_dec_clicked();
+
+    void on_Pb_calcular_clicked();
 
 private:
     Ui::Cframe *ui;
