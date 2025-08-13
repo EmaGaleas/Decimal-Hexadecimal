@@ -13,3 +13,8 @@ Cframe::~Cframe()
     delete ui;
 }
 
+void Cframe::Doc_Hex()
+{
+
+}
+

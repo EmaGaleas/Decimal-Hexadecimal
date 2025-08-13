@@ -14,6 +14,7 @@ class Cframe : public QMainWindow
 public:
     Cframe(QWidget *parent = nullptr);
     ~Cframe();
+    void Doc_Hex();
 
 private:
     Ui::Cframe *ui;
