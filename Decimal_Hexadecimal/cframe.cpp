@@ -47,6 +47,44 @@ QString Cframe::Dec_Hex(int* numeroDecimal)
     return resultado;
 }
 
+int Cframe::hex_dec(const QString& text){
+    int potenciaActual=1;
+    int decimal = 0;
+
+    QString hexadecimal = text.toUpper();
+
+    for(int i = hexadecimal.length() - 1; i >= 0; i--){
+        QChar c = hexadecimal.at(i);
+        int digito;
+
+        switch (c.toLatin1()) {
+        case '0':  digito = 0; break;
+        case '1':  digito = 1; break;
+        case '2':  digito = 2; break;
+        case '3':  digito = 3; break;
+        case '4':  digito = 4; break;
+        case '5':  digito = 5; break;
+        case '6':  digito = 6; break;
+        case '7':  digito = 7; break;
+        case '8':  digito = 8; break;
+        case '9':  digito = 9; break;
+        case 'A':  digito = 10; break;
+        case 'B':  digito = 11; break;
+        case 'C':  digito = 12; break;
+        case 'D':  digito = 13; break;
+        case 'E':  digito = 14; break;
+        case 'F':  digito  = 15; break;
+        default:
+        throw std::invalid_argument("Carácter hexadecimal no válido: " + QString(c).toStdString());
+        }
+
+    decimal += digito * potenciaActual;
+    potenciaActual = potenciaActual*16;
+
+    }
+    return decimal;
+}
+
 
 
 void Cframe::on_Pb_calcular_clicked()
@@ -56,18 +94,36 @@ void Cframe::on_Pb_calcular_clicked()
         if(texto.isEmpty()){
             QMessageBox::warning(this, "Revisar", "Debe ingresar un dato a convertir.");
         }else{
-            //aqui llamar a funcion con resultado
+
+
+
             if(ui->Rb_dec_a_hex->isChecked()){
+
+                bool esNumero;
+                texto.toInt(&esNumero);
+                if(!esNumero) {
+                    QMessageBox::warning(this, "Error", "Debe ingresar un número decimal válido.");
+                    return;
+                }
+
                 int* numeroPtr = new int(ui->TXT_ingresado->text().toInt());
                 QString hex = Dec_Hex(numeroPtr);
                 delete numeroPtr;
-
                 ui->Le_obtenido->setText(hex);
-            }else{
-                QMessageBox::warning(this, "Aviso", "Aun no tenemos una funcion que resuelva este caso.\nVuelve Pronto ;(");
 
+            }else{
+
+                try {
+                    int* decimalPtr = new int(hex_dec(texto));
+                    ui->Le_obtenido->setText(QString::number(*decimalPtr));
+                    delete decimalPtr;
+
+                } catch (const std::invalid_argument& e) {
+                    QMessageBox::warning(this, "Error", "Entrada hexadecimal no valida.\n Solo use digitos del 0-9 y letras entre A-F");
+                }
             }
         }
+
     }else{
         QMessageBox::warning(this, "Aviso", "Debe seleccionar qué proceso desea realizar.");
     }
