@@ -1,0 +1,6 @@
+# Archivos de usuario de Qt Creator
+**/*.pro.user
+**/*.pro.user.*  # versiones de respaldo
+
+# Carpetas de build generadas por Qt Creator
+**/build-*/
