@@ -1,2 +1,4 @@
-*build-Decimal_Hexadecimal*
-*Decimal_Hexadecimal.pro.user*
+**/build-Decimal_Hexadecimal/
+
+**/Decimal_Hexadecimal.pro.user
+
