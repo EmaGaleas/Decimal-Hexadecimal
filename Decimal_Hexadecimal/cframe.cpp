@@ -2,6 +2,7 @@
 #include "ui_cframe.h"
 #include <QPixmap>
 #include <QMessageBox>
+#include <bits/stdc++.h>
 
 Cframe::Cframe(QWidget *parent)
     : QMainWindow(parent)
@@ -48,41 +49,30 @@ QString Cframe::Dec_Hex(int* numeroDecimal)
 }
 
 int Cframe::hex_dec(const QString& text){
-    int potenciaActual=1;
-    int decimal = 0;
+    QByteArray arr = text.toUpper().toLatin1();
+    const char* p = arr.constData();
+    int len = arr.size();
 
-    QString hexadecimal = text.toUpper();
+    const char* end = p + len - 1;
+    int base = 1;      // 16^0
+    int dec_val = 0;
 
-    for(int i = hexadecimal.length() - 1; i >= 0; i--){
-        QChar c = hexadecimal.at(i);
-        int digito;
-
-        switch (c.toLatin1()) {
-        case '0':  digito = 0; break;
-        case '1':  digito = 1; break;
-        case '2':  digito = 2; break;
-        case '3':  digito = 3; break;
-        case '4':  digito = 4; break;
-        case '5':  digito = 5; break;
-        case '6':  digito = 6; break;
-        case '7':  digito = 7; break;
-        case '8':  digito = 8; break;
-        case '9':  digito = 9; break;
-        case 'A':  digito = 10; break;
-        case 'B':  digito = 11; break;
-        case 'C':  digito = 12; break;
-        case 'D':  digito = 13; break;
-        case 'E':  digito = 14; break;
-        case 'F':  digito  = 15; break;
-        default:
-        throw std::invalid_argument("Carácter hexadecimal no válido: " + QString(c).toStdString());
+    for (const char* ptr = end; ptr >= p; --ptr) {
+        if (*ptr >= '0' && *ptr <= '9') {
+            dec_val += (*ptr - '0') * base;
         }
-
-    decimal += digito * potenciaActual;
-    potenciaActual = potenciaActual*16;
-
+        else if (*ptr >= 'A' && *ptr <= 'F') {
+            dec_val += (*ptr - 'A' + 10) * base;
+        }
+        else {
+            throw std::invalid_argument(
+                        std::string("Carácter hexadecimal no válido: ") + *ptr
+                        );
+        }
+        base *= 16;
     }
-    return decimal;
+
+    return dec_val;
 }
 
 
@@ -95,14 +85,12 @@ void Cframe::on_Pb_calcular_clicked()
             QMessageBox::warning(this, "Revisar", "Debe ingresar un dato a convertir.");
         }else{
 
-
-
             if(ui->Rb_dec_a_hex->isChecked()){
 
                 bool esNumero;
                 texto.toInt(&esNumero);
                 if(!esNumero) {
-                    QMessageBox::warning(this, "Error", "Debe ingresar un número decimal válido.");
+                    QMessageBox::warning(this, "Error", "Debe ingresar un número decimal valido.");
                     return;
                 }
 
@@ -125,7 +113,7 @@ void Cframe::on_Pb_calcular_clicked()
         }
 
     }else{
-        QMessageBox::warning(this, "Aviso", "Debe seleccionar qué proceso desea realizar.");
+        QMessageBox::warning(this, "Aviso", "Debe seleccionar el proceso que desea realizar.");
     }
 }
 

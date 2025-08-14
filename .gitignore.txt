@@ -1,4 +1,7 @@
-**/build-Decimal_Hexadecimal/
+# Ignorar todos los archivos .pro.user
+**/*.pro.user
 
-**/Decimal_Hexadecimal.pro.user
+# Ignorar todas las carpetas de build (Qt Creator genera builds con nombres largos)
+**/build-*/
+
 
