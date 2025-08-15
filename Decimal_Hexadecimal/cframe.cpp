@@ -11,41 +11,68 @@ Cframe::Cframe(QWidget *parent)
     ui->setupUi(this);
     setFixedSize(size());
     estiloInicial();
+    Res= new int();
+    Coc= new int();
+    Dec= new int();
+
 
 }
 
 Cframe::~Cframe()
 {
+    Coc=NULL;
+    delete Coc;
+    Res=NULL;
+    delete Res;
+    Dec=NULL;
+    delete Dec;
+    Hexi=NULL;
+    delete Hexi;
     delete ui;
+
+
 }
 //Area de codigo funcional
 
-QString Cframe::Dec_Hex(int* numeroDecimal)
+void Cframe::Dec_Hex()
 {
-    char hexDigitos[] = "0123456789ABCDEF";
-    int valor = *numeroDecimal;
-
-    if(valor == 0) return "0";
-
-    char* temp = new char[20];
-    char* pTemp = temp;
-
-    while(valor > 0) {
-        *pTemp = hexDigitos[valor % 16];
-        valor /= 16;
-        pTemp++;
+    Dec=Coc;
+    for (;*Dec>=16 ; ) {
+        *Res=*Dec%16;
+        *Coc=*Dec/16;
+      //  *Dec=*Dec/16;
+        Hex();
     }
-    *pTemp = '\0';
+    *Res=*Dec;
+    Hex();
+}
 
-    QString resultado;
-    char* end = pTemp - 1;
-    for(char* ptr = end; ptr >= temp; ptr--) {
-        resultado.append(*ptr);
+void Cframe::Hex()
+{
+    switch(*Res){
+    case 15:
+        *Hexi= *Hexi + "F";
+        break;
+    case 14:
+        *Hexi= *Hexi + "E";
+        break;
+    case 13:
+        *Hexi= *Hexi + "D";
+        break;
+    case 12:
+        *Hexi= *Hexi + "C";
+        break;
+    case 11:
+        *Hexi= *Hexi + "B";
+        break;
+    case 10:
+        *Hexi= *Hexi + "A";
+        break;
+    default:
+        *Hexi= *Hexi + QString::number(*Res);
+
     }
 
-    delete[] temp;
-
-    return resultado;
 }
 
 int Cframe::hex_dec(const QString& text){
@@ -74,9 +101,6 @@ int Cframe::hex_dec(const QString& text){
 
     return dec_val;
 }
-
-
-
 void Cframe::on_Pb_calcular_clicked()
 {
     if(ui->Rb_dec_a_hex->isChecked() || ui->Rb_hex_a_dec->isChecked()){
@@ -86,18 +110,17 @@ void Cframe::on_Pb_calcular_clicked()
         }else{
 
             if(ui->Rb_dec_a_hex->isChecked()){
-
+                Hexi= new QString("");
                 bool esNumero;
-                texto.toInt(&esNumero);
+                int numero = texto.toInt(&esNumero);
                 if(!esNumero) {
                     QMessageBox::warning(this, "Error", "Debe ingresar un número decimal valido.");
                     return;
                 }
-
-                int* numeroPtr = new int(ui->TXT_ingresado->text().toInt());
-                QString hex = Dec_Hex(numeroPtr);
-                delete numeroPtr;
-                ui->Le_obtenido->setText(hex);
+                *Dec=numero;
+                *Coc=numero;
+                Dec_Hex();
+                ui->Le_obtenido->setText(*Hexi);
 
             }else{
 
@@ -116,7 +139,6 @@ void Cframe::on_Pb_calcular_clicked()
         QMessageBox::warning(this, "Aviso", "Debe seleccionar el proceso que desea realizar.");
     }
 }
-
 
 //codigo de estilo y logica relacionada a lo visual NO TOCAR NI HACER NADA AQUI ABAJO
 void Cframe::estiloInicial()

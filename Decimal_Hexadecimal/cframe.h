@@ -21,7 +21,10 @@ public:
     void estiloInicial();
     void actualizarLabels(const QString& , const QString& );
     int hex_dec(const QString& text);
-    QString Dec_Hex(int* );
+    void Dec_Hex();
+
+
+    void Hex();
 
 private slots:
     void on_Rb_dec_a_hex_clicked();
@@ -30,5 +33,7 @@ private slots:
 
 private:
     Ui::Cframe *ui;
+    int *Dec,*Coc,*Res;
+    QString *Hexi;
 };
 #endif // CFRAME_H
