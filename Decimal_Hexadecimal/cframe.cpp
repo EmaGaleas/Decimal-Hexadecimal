@@ -14,8 +14,10 @@ Cframe::Cframe(QWidget *parent)
     Res= new int();
     Coc= new int();
     Dec= new int();
-
-
+    Hexi = new QString();
+    Pos = new int();
+    Val = new int();
+    digito = new QChar();
 }
 
 Cframe::~Cframe()
@@ -29,7 +31,12 @@ Cframe::~Cframe()
     Hexi=NULL;
     delete Hexi;
     delete ui;
-
+    Pos=NULL;
+    delete Pos;
+    Val = NULL;
+    delete Val;
+    digito = NULL;
+    delete digito;
 
 }
 //Area de codigo funcional
@@ -47,6 +54,24 @@ void Cframe::Dec_Hex()
     Hex();
 }
 
+void Cframe::Hex_Dec()
+{
+    *Dec = 0;
+    *Pos = Hexi->length() - 1;
+
+    for (;*Pos >= 0;) {
+        *digito = Hexi->at(*Pos);
+        Deci();
+        *Dec += *Val * pow(16, (Hexi->length() - 1 - *Pos));
+        (*Pos)--;
+    }
+}
+
+void Cframe::Deci()
+{
+    (*digito=='F')? *Val = 15 : (*digito=='E')? *Val =14 : (*digito=='D')? *Val =13 : (*digito=='C')? *Val =12 : (*digito=='B')? *Val =11: (*digito=='A')? *Val = 10: *Val = digito->digitValue();
+
+}
 void Cframe::Hex()
 {
     switch(*Res){
@@ -125,10 +150,13 @@ void Cframe::on_Pb_calcular_clicked()
             }else{
 
                 try {
-                    int* decimalPtr = new int(hex_dec(texto));
-                    ui->Le_obtenido->setText(QString::number(*decimalPtr));
-                    delete decimalPtr;
-
+                    if (!esHexadecimalValido(texto)) {
+                        QMessageBox::warning(this, "Error", "Entrada hexadecimal no válida.\nSolo use dígitos (0-9) o letras (A-F).");
+                        return;
+                    }
+                    Hexi = new QString(texto.toUpper());
+                    Hex_Dec();
+                    ui->Le_obtenido->setText(QString::number(*Dec));
                 } catch (const std::invalid_argument& e) {
                     QMessageBox::warning(this, "Error", "Entrada hexadecimal no valida.\n Solo use digitos del 0-9 y letras entre A-F");
                 }
@@ -164,6 +192,19 @@ void Cframe::actualizarLabels(const QString& textoIngreso, const QString& textoS
     ui->L_valorobtenido->setText(textoSalida);
     ui->TXT_ingresado->clear();
     ui->Le_obtenido->clear();
+}
+
+bool Cframe::esHexadecimalValido(const QString &texto) {
+    for (int i = 0; i < texto.length(); ++i) {
+        QChar c = texto.at(i).toUpper(); // Convertir a mayúscula para simplificar
+        bool esDigito = (c >= '0' && c <= '9');
+        bool esLetraValida = (c >= 'A' && c <= 'F');
+
+        if (!esDigito && !esLetraValida) {
+            return false; // Carácter no válido
+        }
+    }
+    return true; // Todos los caracteres son válidos
 }
 
 void Cframe::on_Rb_dec_a_hex_clicked() {

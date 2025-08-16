@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <iostream>
+#include <string>
 
 using std::string;
 
@@ -22,7 +23,9 @@ public:
     void actualizarLabels(const QString& , const QString& );
     int hex_dec(const QString& text);
     void Dec_Hex();
-
+    void Hex_Dec();
+    void Deci();
+    bool esHexadecimalValido(const QString &texto);
 
     void Hex();
 
@@ -33,7 +36,8 @@ private slots:
 
 private:
     Ui::Cframe *ui;
-    int *Dec,*Coc,*Res;
+    int *Dec,*Coc,*Res,*Pos, *Val;
     QString *Hexi;
+    QChar *digito;
 };
 #endif // CFRAME_H
