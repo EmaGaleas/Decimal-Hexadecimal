@@ -46,12 +46,36 @@ void Cframe::Dec_Hex()
     Dec=Coc;
     for (;*Dec>=16 ; ) {
         *Res=*Dec%16;
-        *Coc=*Dec/16;
-      //  *Dec=*Dec/16;
+        *Dec=*Dec/16;
         Hex();
     }
     *Res=*Dec;
     Hex();
+}
+void Cframe::Hex()
+{
+    switch (*Res) {
+    case 15:
+        *Hexi = "F" + *Hexi;
+        break;
+    case 14:
+        *Hexi = "E" + *Hexi;
+        break;
+    case 13:
+        *Hexi = "D" + *Hexi;
+        break;
+    case 12:
+        *Hexi = "C" + *Hexi;
+        break;
+    case 11:
+        *Hexi = "B" + *Hexi;
+        break;
+    case 10:
+        *Hexi = "A" + *Hexi;
+        break;
+    default:
+        *Hexi = QString::number(*Res) + *Hexi;
+    }
 }
 
 void Cframe::Hex_Dec()
@@ -72,60 +96,7 @@ void Cframe::Deci()
     (*digito=='F')? *Val = 15 : (*digito=='E')? *Val =14 : (*digito=='D')? *Val =13 : (*digito=='C')? *Val =12 : (*digito=='B')? *Val =11: (*digito=='A')? *Val = 10: *Val = digito->digitValue();
 
 }
-void Cframe::Hex()
-{
-    switch(*Res){
-    case 15:
-        *Hexi= *Hexi + "F";
-        break;
-    case 14:
-        *Hexi= *Hexi + "E";
-        break;
-    case 13:
-        *Hexi= *Hexi + "D";
-        break;
-    case 12:
-        *Hexi= *Hexi + "C";
-        break;
-    case 11:
-        *Hexi= *Hexi + "B";
-        break;
-    case 10:
-        *Hexi= *Hexi + "A";
-        break;
-    default:
-        *Hexi= *Hexi + QString::number(*Res);
-
-    }
-
-}
-
-int Cframe::hex_dec(const QString& text){
-    QByteArray arr = text.toUpper().toLatin1();
-    const char* p = arr.constData();
-    int len = arr.size();
-
-    const char* end = p + len - 1;
-    int base = 1;      // 16^0
-    int dec_val = 0;
-
-    for (const char* ptr = end; ptr >= p; --ptr) {
-        if (*ptr >= '0' && *ptr <= '9') {
-            dec_val += (*ptr - '0') * base;
-        }
-        else if (*ptr >= 'A' && *ptr <= 'F') {
-            dec_val += (*ptr - 'A' + 10) * base;
-        }
-        else {
-            throw std::invalid_argument(
-                        std::string("Carácter hexadecimal no válido: ") + *ptr
-                        );
-        }
-        base *= 16;
-    }
-
-    return dec_val;
-}
+//int Cframe::hex_dec(const QString& text){}
 void Cframe::on_Pb_calcular_clicked()
 {
     if(ui->Rb_dec_a_hex->isChecked() || ui->Rb_hex_a_dec->isChecked()){

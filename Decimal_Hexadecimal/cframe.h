@@ -21,7 +21,7 @@ public:
     //void Doc_Hex();
     void estiloInicial();
     void actualizarLabels(const QString& , const QString& );
-    int hex_dec(const QString& text);
+    //int hex_dec(const QString& text);
     void Dec_Hex();
     void Hex_Dec();
     void Deci();
